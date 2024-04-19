@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo</title>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <style>
+        body {
+        background-image: url("{{ url_for('static', filename='images/bor3y2.jpg') }}");
+        background-size: contain;
+        background-position: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.5); 
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #FFA500;
+            text-shadow: -1px -1px 0 black,  
+            1px -1px 0 black,
+            -1px  1px 0 black,
+            1px  1px 0 black;
+        }           
+
+
+        .todo-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .todo-status {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .btn-group {
+            text-align: right;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #FFA500;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        
+        .btn-success {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background-color: #219653;
+        }
+
+        
+        .todo-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .add_button {
+            background-color: #FFA500;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="header">ToDo</h1>
+        <form class="ui form" action="/add" method="post">
+            <div class="field">
+                <label for="Title"></label>
+                <input type="text" name="name" class="todo-input" placeholder="name">
+                <input type="text" name="student_id" class="todo-input" placeholder="student_id">
+                <input type="text" name="gpa" class="todo-input" placeholder="gpa">
+                <input type="text" name="age" class="todo-input" placeholder="name">
+            </div>
+            <button class="add_button" type="submit">Add</button>
+        </form>
+
+        <hr>
+
+        {% for std in stdlist %}
+        <div class="todo-item">
+            <div class="todo-title">{{std[1]}}</div>
+            <div class="todo-title">{{std[2]}}</div>
+            <div class="todo-title">{{std[3]}}</div>
+            <div class="todo-title">{{std[4]}}</div>
+            <div class="btn-group">
+                <a class="btn btn-danger" href="/delete/{{ std[0] }}">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</head>
+<style>
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+        body,
+        .ui.container {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .ui.segment {
+            background-color: #444;
+        }
+
+        .ui.label {
+            color: #fff;
+        }
+        .ui.big.header {
+            color: #fff;
+        }
+    }
+</style>
+<body>
+    <div style="margin-top: 50px;" class="ui container">
+        <h1 style="text-align: center">ToDo</h1>
+        <form class="ui form" action="/add" method="post">
+            <div class="field">
+                <label for="Title"></label>
+                <input type="text" name="title" placeholder="enter todo name"><br>
+            </div>
+            <button class="ui blue button" type="submit">Add</button>
+        </form>
+
+
+        <hr>
+        {% for todo in taskslist %}
+        <div class="ui segment">
+            <p class="ui big header">{{todo.id}} | {{todo.title}}</p>
+            {% if todo.complete == False %}
+            <span class="ui red label">Not Complete</span>
+            {% else %}
+            <span class="ui green label">Completed</span>
+            {% endif %}
+            <div class="ui buttons">
+            <a  class="ui  blue button" href="/update/{{ todo.id }}">Update</a>
+            <a  class="ui red button" href="/delete/{{ todo.id }}">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+        <div>
+        <img class="ui centered medium rounded image" src="{{ url_for('static', filename='images/bor3y.jpg') }}" alt="bor3y">
+        <p style="text-align: center">Bor3y &#10084;</p>
+        </div>
+    </div>
+</body>
+</html>
