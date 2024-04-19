@@ -2,7 +2,6 @@ import logging
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 
-# Set up logging
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class DBManager:
@@ -11,12 +10,12 @@ class DBManager:
         self.cursor = None
         try:
             pf = open(password_file, 'r')
-            password = pf.read().strip()  # Strip newline characters
+            password = pf.read().strip() 
             pf.close()
             self.connection = mysql.connector.connect(
                 user=user, 
                 password=password,
-                host=host, # name of the mysql service as set in the docker compose file
+                host=host, 
                 database=database,
                 auth_plugin='mysql_native_password'
             )
@@ -53,7 +52,7 @@ class DBManager:
         try:
             self.cursor.execute('SELECT * FROM students')
             records = self.cursor.fetchall()
-            logging.info(f"Fetched records: {records}")  # Log fetched records
+            logging.info(f"Fetched records: {records}")  
             return records
         except Exception as e:
             logging.error(f"Error querying titles: {str(e)}")
