@@ -107,22 +107,6 @@ def add():
         logging.error(f"Error adding record: {str(e)}")
         return "An error occurred."
 
-@app.get("/update/<int:todo_id>")
-def update(todo_id):
-    try:
-        with engine.connect() as connection:
-            result = connection.execute(text(f"SELECT complete FROM tasks WHERE id={todo_id}"))
-            todo = result.fetchone() 
-            if todo:
-                complete = todo[0]  
-                new_complete = not complete
-                connection.execute(text(f"UPDATE tasks SET complete={new_complete} WHERE id={todo_id}"))
-                connection.commit()
-        return redirect(url_for("home"))
-    except Exception as e:
-        logging.error(f"Error updating record: {str(e)}")
-        return "An error occurred."
-
 @app.get("/delete/<int:std_id>")
 def delete(std_id):
     global conn
