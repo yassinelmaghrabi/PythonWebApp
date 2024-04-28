@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS students (
+id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(255),
+student_id VARCHAR(20),
+gpa DOUBLE CHECK (gpa >= 0.0 AND gpa <= 4.0),
+age INT)
