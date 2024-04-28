@@ -36,16 +36,11 @@ class DBManager:
 
     def populate_db(self):
         try:
-            self.cursor.execute(
-                """
-            CREATE TABLE IF NOT EXISTS students (
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            name VARCHAR(255),
-            student_id VARCHAR(20),
-            gpa DOUBLE CHECK (gpa >= 0.0 AND gpa <= 4.0),
-            age INT)
-            """)
 
+            with open('schema.sql', 'r') as file:
+                sql_query = file.read()
+
+            self.cursor.execute(sql_query)
             self.connection.commit()
         except Exception as e:
             logging.error(f"Error creating table: {str(e)}")
