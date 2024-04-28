@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/index.css">
+    <title>Student List</title>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <h2>Student List</h2>
+            <div id="student-list">
+                <!-- Loop through the students list -->
+                {% for student in students %}
+                <div class="student-block">
+                    <div class="student-info">Name: {{ student.name }}</div>
+                    <div class="student-info">ID: {{ student.id }}</div>
+                    <div class="student-info">GPA: {{ student.gpa }}</div>
+                    <div class="student-info">Age: {{ student.age }}</div>
+                    <form method="POST"> <!-- Form for deleting students -->
+                        <input type="hidden" name="delete_id" value="{{ student.id }}">
+                        <button class="delete-button" type="submit">Delete</button>
+                    </form>
+                </div>
+                {% endfor %}
+                <a href="{{ url_for('index') }}" class="button1">Back</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
