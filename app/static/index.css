@@ -17,7 +17,9 @@ section {
     background: url('158905.jpg') no-repeat center center;
     background-size: cover;
 }
-
+.alert.alert-success {
+    color: rgb(0, 255, 0);
+  }
 
 .form-box {
     position: relative;

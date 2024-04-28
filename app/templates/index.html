@@ -9,14 +9,17 @@
     <section>
         <div class="form-box1">
             <div class="form-value">
-                <form id="add-student-form" method="POST">
+                <form id="add-student-form" action="/add" method="post">
                     <h2>Add a Team Member</h2>
 
                     <!-- Display the success message if it's set -->
-                    {% if success_message %}
-                    <div class="success-message">{{ success_message }}</div>
-                    {% endif %}
-
+   {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+           <div class="alert alert-{{ category }}" role="alert"> {{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
                     <div class="input-box">
                         <ion-icon name="person-circle-outline"></ion-icon>
                         <input type="text" name="studentName" required>

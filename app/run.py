@@ -1,8 +1,10 @@
 import logging
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import mysql.connector
 
-logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='app.log', level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 class DBManager:
     def __init__(self, database='example', host="db", user="root", password_file=None):
@@ -10,12 +12,12 @@ class DBManager:
         self.cursor = None
         try:
             pf = open(password_file, 'r')
-            password = pf.read().strip() 
+            password = pf.read().strip()
             pf.close()
             self.connection = mysql.connector.connect(
-                user=user, 
+                user=user,
                 password=password,
-                host=host, 
+                host=host,
                 database=database,
                 auth_plugin='mysql_native_password'
             )
@@ -35,7 +37,7 @@ class DBManager:
     def populate_db(self):
         try:
             self.cursor.execute(
-            """
+                """
             CREATE TABLE IF NOT EXISTS students (
             id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(255),
@@ -52,7 +54,7 @@ class DBManager:
         try:
             self.cursor.execute('SELECT * FROM students')
             records = self.cursor.fetchall()
-            logging.info(f"Fetched records: {records}")  
+            logging.info(f"Fetched records: {records}")
             return records
         except Exception as e:
             logging.error(f"Error querying titles: {str(e)}")
@@ -74,19 +76,29 @@ class DBManager:
             logging.error(f"Error deleting student: {str(e)}")
 
 
-
 app = Flask(__name__)
+app.secret_key = 'secretkey'
 conn = None
+
 
 @app.route("/")
 def home():
+    global conn
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        logging.error(f"Error in home route: {str(e)}")
+        return "An error occurred."
+
+@app.route("/students")
+def students_list():
     global conn
     try:
         if not conn:
             conn = DBManager(password_file='/run/secrets/db-password')
             conn.populate_db()
         rec = conn.query_titles()
-        return render_template('index.html', stdlist=rec)
+        return render_template('students.html', students=rec)
     except Exception as e:
         logging.error(f"Error in home route: {str(e)}")
         return "An error occurred."
@@ -97,15 +109,17 @@ def add():
     if not conn:
         conn = DBManager(password_file='/run/secrets/db-password')
     try:
-        name = request.form.get("name")
-        student_id = request.form.get("student_id")
-        gpa = request.form.get("gpa")
-        age = request.form.get("age")
+        name = request.form.get("studentName")
+        student_id = request.form.get("studentId")
+        gpa = request.form.get("studentGpa")
+        age = request.form.get("studentAge")
         conn.add(name,student_id,gpa,age)
+        flash(f"Student {name} has been added", 'success')
         return redirect(url_for("home"))
     except Exception as e:
         logging.error(f"Error adding record: {str(e)}")
         return "An error occurred."
+
 
 @app.get("/delete/<int:std_id>")
 def delete(std_id):
@@ -114,7 +128,7 @@ def delete(std_id):
         conn = DBManager(password_file='/run/secrets/db-password')
     try:
         conn.delete(std_id)
-        return redirect(url_for("home"))
+        return redirect(url_for("students_list"))
     except Exception as e:
         logging.error(f"Error deleting record: {str(e)}")
         return "An error occurred."
