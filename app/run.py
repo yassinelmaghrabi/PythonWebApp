@@ -79,6 +79,8 @@ conn = None
 @app.route("/")
 def home():
     global conn
+    conn = DBManager(password_file='/run/secrets/db-password')
+    conn.populate_db()
     try:
         return render_template('index.html')
     except Exception as e:
