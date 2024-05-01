@@ -20,6 +20,9 @@ section {
 .alert.alert-success {
     color: rgb(0, 255, 0);
   }
+.alert.alert-danger {
+    color: rgb(255, 0, 0);
+  }
 
 .form-box {
     position: relative;

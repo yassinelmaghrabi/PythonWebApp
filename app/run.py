@@ -60,8 +60,10 @@ class DBManager:
             values = (name, student_id, float(gpa), int(age))
             self.cursor.execute(query, values)
             self.connection.commit()
+            return 1
         except Exception as e:
             logging.error(f"Error inserting into table: {str(e)}")
+            return 0
 
     def delete(self, stdid):
         try:
@@ -110,8 +112,11 @@ def add():
         student_id = request.form.get("studentId")
         gpa = request.form.get("studentGpa")
         age = request.form.get("studentAge")
-        conn.add(name,student_id,gpa,age)
-        flash(f"Student {name} has been added", 'success')
+        stat = conn.add(name,student_id,gpa,age)
+        if stat == 1:
+            flash(f"Student {name} has been added", 'success')
+        else: 
+            flash(f"Student was not added due to incorrect value format/value", "danger")
         return redirect(url_for("home"))
     except Exception as e:
         logging.error(f"Error adding record: {str(e)}")
